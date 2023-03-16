@@ -127,3 +127,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+infra/.terraform/*
+infra/*.tfvars
+infra/*.tfvars.*
+infra/crash.log
+infra/crash.*.log
+infra/terraform.tfstate
+infra/terraform.tfstate.*
+infra/.terraform.lock.hcl
+*__pycache__/*
+
+download_data.sh
+test.ipynb
