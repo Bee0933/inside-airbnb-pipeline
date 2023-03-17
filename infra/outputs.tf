@@ -1,7 +1,7 @@
 output "vpc_id" {
-  value       = module.vpc.vpc_id
+  value       = aws_vpc.airbnb-vpc.id
   description = "created vpc id"
-  depends_on  = [module.vpc]
+  depends_on  = [aws_vpc.airbnb-vpc]
 }
 
 output "prefect_agent_cluster_name" {

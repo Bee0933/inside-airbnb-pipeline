@@ -141,3 +141,6 @@ infra/.terraform.lock.hcl
 
 download_data.sh
 test.ipynb
+terraform.tfstate
+test.py
+data/*

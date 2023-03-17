@@ -4,10 +4,10 @@ install:
 		pip --default-timeout=1000 install -r requirements.txt 
 format:
 	# format python code with black
-	black flows/blocks/*.py 
+	black infra/blocks/*.py
 lint:
 	# check code syntaxes
-	pylint --disable=R,C flows/blocks/*.py 
+	pylint --disable=R,C infra/blocks/*.py
 
 
 # CI process
