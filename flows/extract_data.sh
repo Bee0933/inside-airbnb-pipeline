@@ -17,7 +17,7 @@ for MONTH in $MONTHS_AVAILABLE; do
         
         URL="${BASE_URL}/${YEAR}-${MONTH}/data/${TABLE}.csv.gz"
         
-        LOCAL_DIR="../data/raw/${CITY}/${TABLE}/${YEAR}-${MONTH}"
+        LOCAL_DIR="../data/raw/${YEAR}/${CITY}/${TABLE}"
         LOCAL_FILE="${CITY}_${TABLE}_${YEAR}_${MONTH}.csv.gz"
         LOCAL_PATH="${LOCAL_DIR}/${LOCAL_FILE}"
         

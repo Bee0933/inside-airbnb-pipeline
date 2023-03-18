@@ -140,7 +140,7 @@ infra/.terraform.lock.hcl
 *__pycache__/*
 
 download_data.sh
-test.ipynb
+# test.ipynb
 terraform.tfstate
 test.py
 data/*
