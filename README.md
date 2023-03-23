@@ -2,5 +2,5 @@
 
 ![architecture](static/capstone-zoomcamp.drawio.jpg)
 
-# [link to Dataset](http://insideairbnb.com/get-the-data)
+# [link to Dataset](https://www.kaggle.com/datasets/samibrahim/airbnb-sydney)
 
