@@ -23,7 +23,8 @@ for MONTH in $MONTHS_AVAILABLE; do
         
         echo "downloading ${URL} to ${LOCAL_PATH}"
         mkdir -p ${LOCAL_DIR}
-        wget ${URL} -O ${LOCAL_PATH}
+        wget --retry-connrefused -w 10 ${URL} -O ${LOCAL_PATH} 
+        # --tries=inf --waitretry=1
 
         # gunzip ${LOCAL_PATH}
     done

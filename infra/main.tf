@@ -10,7 +10,7 @@ module "prefect_ecs_agent" {
     aws_subnet.airbnb-public-subnet-3.id
   ]
   name                     = "${var.env-prefix}-airbnb-etl"
-  agent_extra_pip_packages = "prefect-aws pandas "
+  agent_extra_pip_packages = "prefect-aws==0.2.5 pandas==1.5.3 kaggle==1.5.13 fastparquet==2023.2.0"
   prefect_account_id       = var.prefect-account-id
   prefect_api_key          = var.prefect-api-key
   prefect_workspace_id     = var.prefect-workspace-id
@@ -20,17 +20,17 @@ module "prefect_ecs_agent" {
 
 
 # s3
-resource "aws_s3_bucket" "airbnb-bucket" {
-  bucket = "airbnb-bucket"
+resource "aws_s3_bucket" "airbnb-bucket-1" {
+  bucket = "airbnb-bucket-1"
 
   tags = {
-    Name        = "airbnb-bucket"
+    Name        = "airbnb-bucket-1"
     Environment = var.env-prefix
   }
 }
 
 resource "aws_s3_bucket_acl" "ny-taxi-lake-acl" {
-  bucket = aws_s3_bucket.airbnb-bucket.id
+  bucket = aws_s3_bucket.airbnb-bucket-1.id
   acl    = "private"
 }
 

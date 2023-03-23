@@ -59,6 +59,45 @@ resource "aws_redshift_subnet_group" "redshift-subnet-group" {
 }
 
 
+# route tables
+resource "aws_route_table" "airbnb-rtb" {
+  vpc_id = aws_vpc.airbnb-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.airbnb-cluster-igw.id
+  }
+
+  tags = {
+    Name = "${var.env-prefix}_airbnb_cluster_route_table"
+  }
+}
+
+# Gateway
+resource "aws_internet_gateway" "airbnb-cluster-igw" {
+  vpc_id = aws_vpc.airbnb-vpc.id
+
+  tags = {
+    Name = "${var.env-prefix}_airbnb_cluster_gateway"
+  }
+}
+
+# Associations
+resource "aws_route_table_association" "airbnb-a-rtb-subnet-1" {
+  subnet_id      = aws_subnet.airbnb-public-subnet-1.id
+  route_table_id = aws_route_table.airbnb-rtb.id
+}
+
+resource "aws_route_table_association" "airbnb-a-rtb-subnet-2" {
+  subnet_id      = aws_subnet.airbnb-public-subnet-2.id
+  route_table_id = aws_route_table.airbnb-rtb.id
+}
+
+resource "aws_route_table_association" "airbnb-a-rtb-subnet-3" {
+  subnet_id      = aws_subnet.airbnb-public-subnet-3.id
+  route_table_id = aws_route_table.airbnb-rtb.id
+}
+
 
 # security group
 resource "aws_security_group" "redshift-serverless-security-group" {

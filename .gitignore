@@ -144,3 +144,6 @@ download_data.sh
 terraform.tfstate
 test.py
 data/*
+environ.sh
+flows/extract_data.sh
+infra/Makefile
