@@ -147,3 +147,9 @@ data/*
 environ.sh
 flows/extract_data.sh
 infra/Makefile
+ci_make.txt
+
+
+dbt_transform/target/
+dbt_transform/dbt_packages/
+dbt_transform/logs/

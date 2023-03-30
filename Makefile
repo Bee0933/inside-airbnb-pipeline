@@ -13,14 +13,6 @@ environment:
 	# create environment variables
 	chmod +x environ.sh &&\
 		./environ.sh
-build-infra:
-	# build terraform infra
-	terraform -chdir=./infra/ apply --auto-approve 
-
-destroy-infra:
-	# destroy terraform infra
-	terraform -chdir=./infra/ apply --auto-approve &&\
-		aws secretsmanager delete-secret --secret-id prefect-api-key-development-airbnb-etl --force-delete-without-recovery
 
 make-blocks:
 	# create prefect blocks

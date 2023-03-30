@@ -6,3 +6,4 @@ prefect==2.8.6
 prefect-aws==0.2.5
 psycopg2-binary==2.9.5
 boto3==1.26.93
+dbt-redshift==1.4.0
