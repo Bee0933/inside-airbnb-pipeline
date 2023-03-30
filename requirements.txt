@@ -5,3 +5,5 @@ pandas==1.5.3
 prefect==2.8.6
 prefect-aws==0.2.5
 fastparquet==2023.2.0
+# pandas_redshift==2.0.5
+psycopg2-binary==2.9.5

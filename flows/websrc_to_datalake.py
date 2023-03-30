@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import timedelta
 from prefect import flow, task, get_run_logger
 from prefect.tasks import task_input_hash
+from prefect.blocks.notifications import SlackWebhook
 from prefect_aws.s3 import S3Bucket
 from kaggle.api.kaggle_api_extended import KaggleApi
 
@@ -25,6 +26,7 @@ def read_csv(data_path: Path) -> pd.DataFrame:
     ).head(1000)
 
 
+# task 1
 @task(
     name="extract data from web src",
     retries=3,
@@ -61,7 +63,8 @@ def extract(files: List[str]) -> List[pd.DataFrame]:
     return [df_listings, df_reviews, df_calenar]
 
 
-@task(name="tansform data fields", retries=0, log_prints=True)
+# task 2
+@task(name="tansform data fields", retries=3, log_prints=True)
 def transfom(df_list: List[pd.DataFrame]) -> Path:
     logger = get_run_logger()
     df_listings, df_reviews, df_calenar = df_list
@@ -87,7 +90,7 @@ def transfom(df_list: List[pd.DataFrame]) -> Path:
     df_listings["host_verifications_email"] = np.where(
         "email" in str(df_listings.host_verifications), "t", "f"
     ).astype("object")
-    df_listings = df_listings.drop(["host_verifications"], axis=1)
+    df_listings = df_listings.drop(["host_verifications","scrape_id","description", "host_about","neighborhood_overview"], axis=1)
     df_listings.price = (
         df_listings.price.str.replace("$", "", regex=True)
         .replace(",", "", regex=True)
@@ -102,7 +105,7 @@ def transfom(df_list: List[pd.DataFrame]) -> Path:
         result = list(set(temp) | set(temp_1))
 
     col_result = [
-        val.replace(" ", "_").replace("-", "_").replace("–", "") for val in result
+        val.replace(" ", "_").replace("-", "_").replace("–", "").replace(":", "").replace("/", "").replace("’", "") for val in result
     ]
     for column_head, column in zip(col_result, result):
         df_listings[f"{column_head}"] = np.where(
@@ -122,6 +125,12 @@ def transfom(df_list: List[pd.DataFrame]) -> Path:
     df_listings.maximum_maximum_nights = df_listings.maximum_maximum_nights.astype(
         "int64"
     )
+    df_listings.host_total_listings_count = df_listings.host_total_listings_count.astype(
+        "int64"
+    )
+    df_listings.index = df_listings.index.astype(
+        "int64"
+    )
 
     df_listings = df_listings.drop(["calendar_last_scraped"], axis=1)
     df_listings.first_review = pd.to_datetime(df_listings.first_review)
@@ -129,14 +138,16 @@ def transfom(df_list: List[pd.DataFrame]) -> Path:
 
     df_listings = df_listings.rename(
         columns={
-            "host_response_rate": "host_response_rate_%",
-            "host_acceptance_rate": "host_acceptance_rate_%",
+            "host_response_rate": "host_response_rate_percentage",
+            "host_acceptance_rate": "host_acceptance_rate_percentage",
         }
     )
     logger.info("processed listings")
 
     # reviews
     df_reviews.date = pd.to_datetime(df_reviews.date)
+    df_reviews = df_reviews.drop(["comments"], axis=1)
+    df_reviews.id = df_reviews.id.astype("int64")
     logger.info("processed reviews")
 
     # calendar
@@ -148,19 +159,14 @@ def transfom(df_list: List[pd.DataFrame]) -> Path:
         "$", "", regex=True
     ).astype("float64")
     logger.info("processed calendar")
-    # save as parquet
+
+    # save as csv
     processed_dir = Path("../data/processed")
     os.makedirs(f"{processed_dir}", exist_ok=True)
 
-    df_listings.to_parquet(
-        f"{processed_dir}/listings.parquet", engine="fastparquet", compression="snappy"
-    )
-    df_reviews.to_parquet(
-        f"{processed_dir}/reviews.parquet", engine="fastparquet", compression="snappy"
-    )
-    df_calenar.to_parquet(
-        f"{processed_dir}/calendar.parquet", engine="fastparquet", compression="snappy"
-    )
+    df_listings.to_csv(f"{processed_dir}/listings.csv", index=False)
+    df_reviews.to_csv(f"{processed_dir}/reviews.csv", index=False)
+    df_calenar.to_csv(f"{processed_dir}/calendar.csv", index=False)
 
     return processed_dir
 
@@ -174,45 +180,61 @@ def delete_files_and_dir(dir_: Path, file_extension: str) -> List[Path]:
     return f" deleted files : {files_in_dir}"
 
 
+
+
+# task 3
 @task(
     name="load to lake",
-    retries=0,
+    retries=3,
     log_prints=True,
 )
-def load_lake(parquet_path: Path) -> None:
+def load_lake(csv_path: Path) -> None:
     logger = get_run_logger()
 
     s3_bucket_block = S3Bucket.load("aws-s3-block")
     logger.info("loaded s3block")
 
-    parquet_files= Path(parquet_path).glob('*.parquet')
+    csv_files = Path(csv_path).glob("*.csv")
 
-    for file in parquet_files:
-        s3_bucket_block.upload_from_path(from_path=f"{file}", to_path=f"{file}".replace("../", ""))
+    for file in csv_files:
+        s3_bucket_block.upload_from_path(
+            from_path=f"{file}", to_path=f"{file}".replace("../", "")
+        )
         logger.info("loaded data to s3")
 
     logger.info("deleting data...")
-    delete_files_and_dir(parquet_path, "parquet")
+    delete_files_and_dir(csv_path, "csv")
 
     logger.info("files deleted!!")
     return
 
 
+
+
+ # flows
 @flow(
     name="ETL airbnb data to S3",
-    retries=0,
+    retries=3,
     log_prints=True,
     description="perfom an ETL process to load airbnb data to data lake",
 )
 def main_flow(files: List[str]):
-    #
+    slack_webhook_block = SlackWebhook.load("slack-block")
+    slack_webhook_block.notify("[Airbnb ETL -> lake] started 🚀")
+
+    # task 1
     datasets = extract(files)
     print("output length : ", len(datasets))
+    slack_webhook_block.notify("[Airbnb ETL -> lake] downloaded dataset completed!! 🔽")
 
-    parquet_path = transfom(datasets)
-    print(os.system(f"ls {parquet_path}"))
+    # task 2
+    csv_path = transfom(datasets)
+    print(os.system(f"ls {csv_path}"))
+    slack_webhook_block.notify("[Airbnb ETL -> lake] transform data completed!! ⚙️⚙️")
 
-    _=load_lake(parquet_path)
+    # task 3
+    _ = load_lake(csv_path)
+    slack_webhook_block.notify("[Airbnb ETL -> lake] loaded to lake completed!! 👍")
 
 
 if __name__ == "__main__":

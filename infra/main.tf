@@ -10,7 +10,7 @@ module "prefect_ecs_agent" {
     aws_subnet.airbnb-public-subnet-3.id
   ]
   name                     = "${var.env-prefix}-airbnb-etl"
-  agent_extra_pip_packages = "prefect-aws==0.2.5 pandas==1.5.3 kaggle==1.5.13 fastparquet==2023.2.0"
+  agent_extra_pip_packages = "prefect-aws==0.2.5 pandas==1.5.3 kaggle==1.5.13 fastparquet==2023.2.0 pandas_redshift==2.0.5"
   prefect_account_id       = var.prefect-account-id
   prefect_api_key          = var.prefect-api-key
   prefect_workspace_id     = var.prefect-workspace-id
@@ -45,6 +45,7 @@ resource "aws_redshift_cluster" "airbnb-redshift-cluster" {
   node_type                 = "dc2.large"
   cluster_type              = "single-node"
   cluster_subnet_group_name = aws_redshift_subnet_group.redshift-subnet-group.id
+  vpc_security_group_ids    = [aws_security_group.redshift-serverless-security-group.id]
   skip_final_snapshot       = true
   iam_roles                 = ["${aws_iam_role.airbnb-redshift-role.arn}"]
   depends_on                = [aws_vpc.airbnb-vpc, aws_security_group.redshift-serverless-security-group, aws_redshift_subnet_group.redshift-subnet-group, aws_iam_role.airbnb-redshift-role]

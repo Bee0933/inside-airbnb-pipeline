@@ -2,6 +2,7 @@ from prefect_aws import ECSTask, AwsCredentials
 from prefect_aws.s3 import S3Bucket
 from prefect.filesystems import GitHub
 from prefect.blocks.notifications import SlackWebhook
+from prefect.blocks.system import Secret
 import os
 import json
 
@@ -16,6 +17,7 @@ execution_role_arn = outputs["prefect_agent_execution_role_arn"]["value"]
 security_group = outputs["prefect_agent_security_group"]["value"]
 service_id = outputs["prefect_agent_service_id"]["value"]
 task_role_arn = outputs["prefect_agent_task_role_arn"]["value"]
+redshift_s3_role = outputs["redshift_s3_role"]["value"]
 
 
 # AWS credentials block
@@ -62,6 +64,18 @@ github_block.save("github-block", overwrite=True)
 # slack notificamtion webhook
 slack_block = SlackWebhook(url=os.environ.get("slack_webhook"))
 slack_block.save("slack-block", overwrite=True)
+
+
+# secrets
+redshift_master_user = Secret(value=os.environ.get("redshift_master_user"))
+redshift_master_user.save("redshiift-master-user", overwrite=True)
+
+redshift_master_password = Secret(value=os.environ.get("redshift_master_password"))
+redshift_master_password.save("redshift-master-password", overwrite=True)
+
+redshift_s3_iam_role = Secret(value=str(redshift_s3_role))
+redshift_s3_iam_role.save("redshift-s3-iam-role", overwrite=True)
+
 
 
 print("Created blocks!!")

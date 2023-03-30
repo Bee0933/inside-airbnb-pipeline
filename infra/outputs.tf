@@ -24,14 +24,17 @@ output "prefect_agent_security_group" {
 
 output "prefect_agent_service_id" {
   value       = module.prefect_ecs_agent.prefect_agent_service_id
-  sensitive   = true
   description = "prefect_agent_service_id"
   depends_on  = [module.prefect_ecs_agent]
 }
 
 output "prefect_agent_task_role_arn" {
   value       = module.prefect_ecs_agent.prefect_agent_task_role_arn
-  sensitive   = true
   description = "prefect_agent_task_role_arn"
   depends_on  = [module.prefect_ecs_agent]
+}
+
+output "redshift_s3_role" {
+  value       = aws_iam_role.airbnb-redshift-role.arn
+  description = "redshift iam role to read datat from s3"
 }
