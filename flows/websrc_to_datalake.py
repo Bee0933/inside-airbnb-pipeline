@@ -13,7 +13,9 @@ from prefect import flow, task, get_run_logger
 from prefect.tasks import task_input_hash
 from prefect.blocks.notifications import SlackWebhook
 from prefect_aws.s3 import S3Bucket
+from prefect.blocks.system import Secret
 from kaggle.api.kaggle_api_extended import KaggleApi
+
 
 
 def read_csv(data_path: Path) -> pd.DataFrame:
@@ -37,17 +39,21 @@ def read_csv(data_path: Path) -> pd.DataFrame:
 def extract(files: List[str]) -> List[pd.DataFrame]:
     logger = get_run_logger()
 
-    # api = KaggleApi()
-    # api.authenticate()
-    # print(api.dataset_list_files('samibrahim/airbnb-sydney').files)
+    kaggle_key=Secret.load("kaggle-key").get()
+    kaggle_user=Secret.load("kaggle-username").get()
+    os.system(f'export KAGGLE_KEY="{kaggle_key}" ')
+    os.system(f'export KAGGLE_USERNAME="{kaggle_user}" ')
+    api = KaggleApi()
+    api.authenticate()
+    print(api.dataset_list_files('samibrahim/airbnb-sydney').files)
 
     DATA_DIR = Path("../data/")
-    # os.makedirs(name=DATA_DIR,exist_ok=True)
+    os.makedirs(name=DATA_DIR,exist_ok=True)
 
-    # for file in files:
-    #     os.makedirs(name=f"{DATA_DIR}/{file}",exist_ok=True)
-    #     api.dataset_download_file('samibrahim/airbnb-sydney',file_name=f"{file}.csv",path=f"{DATA_DIR}/{file}", force=True)
-    #     logger.info(f'downloaded {file}')
+    for file in files:
+        os.makedirs(name=f"{DATA_DIR}/{file}",exist_ok=True)
+        api.dataset_download_file('samibrahim/airbnb-sydney',file_name=f"{file}.csv",path=f"{DATA_DIR}/{file}", force=True)
+        logger.info(f'downloaded {file}')
 
     logger.info("reading listings")
     df_listings = read_csv(

@@ -20,7 +20,7 @@ h as(
 
 select 
       l.listing_id,
-      l.listing_name,
+      l.listing_name, 
       l.room_type,
       l.minimum_nights,
       l.price,
@@ -30,6 +30,7 @@ select
       h.host_response_time,
       h.host_is_superhost,
       h.host_phone_verification,
-      host_email_verification
+      h.host_email_verification,
 from l
 left join h on (l.host_id = h.host_id)
+

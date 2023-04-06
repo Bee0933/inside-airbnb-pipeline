@@ -76,6 +76,13 @@ redshift_master_password.save("redshift-master-password", overwrite=True)
 redshift_s3_iam_role = Secret(value=str(redshift_s3_role))
 redshift_s3_iam_role.save("redshift-s3-iam-role", overwrite=True)
 
+kaggle_key = Secret(value=str(os.environ.get("KAGGLE_KEY")))
+kaggle_key.save("kaggle-key", overwrite=True)
+
+kaggle_username = Secret(value=str(os.environ.get("KAGGLE_USERNAME")))
+kaggle_username.save("kaggle-username", overwrite=True)
+
+
 
 
 print("Created blocks!!")
