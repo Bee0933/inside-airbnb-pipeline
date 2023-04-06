@@ -10,7 +10,7 @@ module "prefect_ecs_agent" {
     aws_subnet.airbnb-public-subnet-3.id
   ]
   name                     = "${var.env-prefix}-airbnb-etl"
-  agent_extra_pip_packages = "prefect-aws==0.2.5 pandas==1.5.3 kaggle==1.5.13 psycopg2-binary==2.9.5 boto3==1.26.93"
+  agent_extra_pip_packages = "prefect-aws==0.2.5 pandas==1.5.3 kaggle==1.5.13 psycopg2-binary==2.9.5 boto3==1.26.93 prefect-dbt==0.3.1"
   prefect_account_id       = var.prefect-account-id
   prefect_api_key          = var.prefect-api-key
   prefect_workspace_id     = var.prefect-workspace-id
