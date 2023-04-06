@@ -1,3 +1,4 @@
+import os
 from prefect import flow
 from prefect_dbt.cloud import DbtCloudCredentials
 from prefect_dbt.cloud.jobs import trigger_dbt_cloud_job_run_and_wait_for_completion
@@ -9,7 +10,7 @@ def run_dbt_cloud_job_flow():
 
       trigger_dbt_cloud_job_run_and_wait_for_completion(
             dbt_cloud_credentials=dbt_cloud_credentials,
-            job_id=259333
+            job_id=os.environ.get('dbt_job_id')
       )
 
 

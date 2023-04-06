@@ -11,8 +11,8 @@ lint:
 
 environment:
 	# create environment variables
-	chmod +x environ.sh &&\
-		./environ.sh
+	chmod +x environment.sh &&\
+		./environment.sh
 
 make-blocks:
 	# create prefect blocks
@@ -46,4 +46,4 @@ trig-dbt-jobs:
 
 
 # CI process
-all: install format lint environment make-blocks
+all: install format lint environment make-blocks src-lake-depl lake-wh-depl trig-dbt-jobs

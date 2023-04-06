@@ -11,7 +11,7 @@ The resulting analytics tables provide valuable insights into the short-term ren
 
  
 ### Data source:
-Kaggle Airbnb sydney dataset (https://www.kaggle.com/datasets/samibrahim/airbnb-sydney)
+[Kaggle Airbnb sydney dataset](https://www.kaggle.com/datasets/samibrahim/airbnb-sydney)
 
 ## Technologies used
 **Cloud**: Amazon Web service (AWS) 
@@ -33,6 +33,21 @@ Kaggle Airbnb sydney dataset (https://www.kaggle.com/datasets/samibrahim/airbnb-
 ## Data Pipeline Diagram
 ![Alt text](static/capstone-zoomcamp.drawio_page-0001.jpg "Data Pipeline Diagram")
 
+## Project build & setup ⚙️ (local)
+- [setup and build infra](./infra/infra_README.md)
+
+- [setup environment variables](./env_README.md)
+
+- setup & build all code and workflow ochestration deployment
+  - `make all`
+    <br> or
+  - [setup and build manually](Makefile)
+
+- data extraction & transformation from websource to data lake runs every monday @ 10am UTC
+- data extraction from lake to warehouse runs every monday @ 1pm UTC
+- data transformation in warehouse runs every monday @ 3pm UTC
+      
+
 
 ## Project Structure
       .
@@ -40,9 +55,6 @@ Kaggle Airbnb sydney dataset (https://www.kaggle.com/datasets/samibrahim/airbnb-
       │   ├── analyses
       │   ├── dbt_packages
       │   ├── dbt_project.yml
-      │   ├── logs
-      │   │   ├── dbt.log
-      │   │   └── dbt.log.legacy
       │   ├── macros
       │   ├── models
       │   │   ├── dim
@@ -59,48 +71,18 @@ Kaggle Airbnb sydney dataset (https://www.kaggle.com/datasets/samibrahim/airbnb-
       │   ├── README.md
       │   ├── seeds
       │   ├── snapshots
-      │   ├── target
-      │   │   ├── compiled
-      │   │   │   └── dbt_transform
-      │   │   │       └── models
-      │   │   │           ├── dim
-      │   │   │           │   ├── dim_hosts_cleansed.sql
-      │   │   │           │   ├── dim_listings_cleansed.sql
-      │   │   │           │   └── dim_listings_hosts.sql
-      │   │   │           ├── fact
-      │   │   │           │   └── fact_reviews.sql
-      │   │   │           └── src
-      │   │   │               ├── src_hosts.sql
-      │   │   │               ├── src_listings.sql
-      │   │   │               └── src_reviews.sql
-      │   │   ├── graph.gpickle
-      │   │   ├── manifest.json
-      │   │   ├── partial_parse.msgpack
-      │   │   ├── run
-      │   │   │   └── dbt_transform
-      │   │   │       └── models
-      │   │   │           ├── dim
-      │   │   │           │   ├── dim_hosts_cleansed.sql
-      │   │   │           │   ├── dim_listings_cleansed.sql
-      │   │   │           │   └── dim_listings_hosts.sql
-      │   │   │           ├── fact
-      │   │   │           │   └── fact_reviews.sql
-      │   │   │           └── src
-      │   │   │               ├── src_hosts.sql
-      │   │   │               ├── src_listings.sql
-      │   │   │               └── src_reviews.sql
-      │   │   └── run_results.json
       │   └── tests
-      ├── environ.sh
+      ├── environment.sh
+      ├── env_README.md
       ├── flows
       │   ├── dbt_flow.py
       │   ├── lake_to_warehouse.py
-      │   ├── test.py
       │   └── websrc_to_datalake.py
       ├── infra
       │   ├── blocks
       │   │   └── prefect_blocks.py
       │   ├── iam.tf
+      │   ├── infra_README.md
       │   ├── main.tf
       │   ├── network.tf
       │   ├── outputs.tf
@@ -109,8 +91,6 @@ Kaggle Airbnb sydney dataset (https://www.kaggle.com/datasets/samibrahim/airbnb-
       │   ├── terraform.tfstate.backup
       │   ├── terraform.tfvars
       │   └── variables.tf
-      ├── logs
-      │   └── dbt.log
       ├── Makefile
       ├── README.md
       ├── requirements.txt
