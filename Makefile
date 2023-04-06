@@ -46,4 +46,4 @@ trig-dbt-jobs:
 
 
 # CI process
-all: install format lint environment  make-blocks
+all: install format lint environment make-blocks

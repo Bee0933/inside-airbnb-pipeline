@@ -153,3 +153,4 @@ ci_make.txt
 dbt_transform/target/
 dbt_transform/dbt_packages/
 dbt_transform/logs/
+tree.txt
