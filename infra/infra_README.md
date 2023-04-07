@@ -2,7 +2,7 @@
 
 create `terraform.tfvars` file, initialize and input the variables from table below
 
-      [filename: terraform.tfvars]
+      [file sample: terraform.tfvars]
 
       env-prefix                        = "development"
       avail-zone                        = "af-south-1"
