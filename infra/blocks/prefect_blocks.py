@@ -73,6 +73,9 @@ redshift_master_user.save("redshiift-master-user", overwrite=True)
 redshift_master_password = Secret(value=os.environ.get("redshift_master_password"))
 redshift_master_password.save("redshift-master-password", overwrite=True)
 
+redshift_host = Secret(value=os.environ.get("redshift_host"))
+redshift_host.save("redshift-host", overwrite=True)
+
 redshift_s3_iam_role = Secret(value=str(redshift_s3_role))
 redshift_s3_iam_role.save("redshift-s3-iam-role", overwrite=True)
 

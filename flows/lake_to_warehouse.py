@@ -50,7 +50,7 @@ def write_rshift(df:pd.DataFrame, table_name:str, s3_file_location:str, iam_role
     columns = list(df.columns)
 
     conn = psycopg2.connect(
-    host="airbnb-redshift-cluster.cg8akmqmv2lj.af-south-1.redshift.amazonaws.com",
+    host=Secret.load("redshift-host").get(),
     port=5439,
     user=redshift_master_user,
     password=redshift_master_password,

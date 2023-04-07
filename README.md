@@ -14,21 +14,24 @@ The resulting analytics tables provide valuable insights into the short-term ren
 [Kaggle Airbnb sydney dataset](https://www.kaggle.com/datasets/samibrahim/airbnb-sydney)
 
 ## Technologies used
-**Cloud**: Amazon Web service (AWS) 
 
-**Infrastructure as code (IaC)**: Terraform 
+___
 
-**Workflow orchestration**: Prefect, Slack (Notification), ECS Fargate
+| Category         | Logo                                        | Names                          |
+|--------------------|---------------------------------------------|-------------------------------|
+| Cloud              | ![AWS logo](https://img.icons8.com/color/48/000000/amazon-web-services.png) | Amazon Web Service(AWS)     |
+| Infrastructure as Code (IaC) | ![Terraform logo](https://img.icons8.com/color/48/000000/terraform.png) | Terraform     |
+| Workflow Orchestration |  <img src="https://seeklogo.com/images/P/prefect-logo-D16B9C45A6-seeklogo.com.png" alt="Prefect logo" width="30" height="48">,    ![Slack logo](https://img.icons8.com/color/48/000000/slack.png), <img src="https://lumigo.io/wp-content/uploads/2020/07/AWS-Fargate@4x.png" alt="fargate logo" width="45" height="45">, ![Github logo](https://img.icons8.com/ios-filled/48/000000/github.png) | Prefect, Slack (Notification), ECS Fargate, Github (storage block) |
+| Data Warehouse | <img src="https://www.dataliftoff.com/wp-content/uploads/2019/07/Amazon-Redshift@4x.png" alt="redshift logo" width="45" height="45"> | Redshift |
+| Data Lake        | <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--PnCOq3po--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://day-journal.com/memo/images/logo/aws/s3.png" alt="s3 logo" width="45" height="45"> | AWS S3 Bucket                 |
+| Batch Processing | ![Python logo](https://img.icons8.com/color/48/000000/python.png), ![Pandas logo](https://img.icons8.com/color/48/000000/pandas.png) | Python, Pandas                |
+| Data Transformations | <img src="https://seeklogo.com/images/D/dbt-logo-500AB0BAA7-seeklogo.com.png" alt="dbt logo" width="43" height="43">, ![SQL logo](https://img.icons8.com/ios-filled/48/000000/sql.png) | DBT, SQL                      |
+| Data Visualizations | <img src="https://seeklogo.com/images/G/google-looker-logo-B27BD25E4E-seeklogo.com.png" alt="looker logo" width="35" height="45"> | Looker Studio                 |
 
-**Data Wareshouse**: Redshift
 
-**Data Lake**: AWS S3 Bucket
 
-**Batch processing**: Python, Pandas
 
-**Data Transformations**:  DBT, SQL
 
-**Data Visualizations**:  Looker Studio
 
 ## Data Pipeline Diagram
 ![Alt text](static/capstone-zoomcamp.drawio_page-0001.jpg "Data Pipeline Diagram")
@@ -39,14 +42,19 @@ The resulting analytics tables provide valuable insights into the short-term ren
 - [setup environment variables](./env_README.md)
 
 - setup & build all code and workflow ochestration deployment
-  - `make all`
-    <br> or
-  - [setup and build manually](Makefile)
+  - `make all` <br> *run command from root directory*
+    <br> 
+    <br>
+  - [or setup and build manually](Makefile)
 
+**Data workflow ochestration**: 
 - data extraction & transformation from websource to data lake runs every monday @ 10am UTC
 - data extraction from lake to warehouse runs every monday @ 1pm UTC
 - data transformation in warehouse runs every monday @ 3pm UTC
       
+**Workflow ochestration notification sample**:
+
+![Alt text](static/sample-slack-notif.png "Slcak Notification ETL src to data lake")
 
 
 ## Project Structure
@@ -97,3 +105,11 @@ The resulting analytics tables provide valuable insights into the short-term ren
       ├── static
       │   └── capstone-zoomcamp.drawio_page-0001.jpg
       └── test.ipynb
+
+
+## Further Improvements
+There is scope for improvement in several areas of this project, such as:
+
+- Conducting tests
+- Implementing CI/CD
+ 

@@ -1,5 +1,15 @@
 # Terrafrom infrastructure inputs (tfvars required values)
 
+create `terraform.tfvars` file, initialize and input the variables from table below
+
+      [filename: terraform.tfvars]
+
+      env-prefix                        = "development"
+      avail-zone                        = "af-south-1"
+      aws-cred-profile                  = "default" 
+
+
+
 These values are required by terrafrom to build the pipeline infrastructure
 
 | Variable                          | Value                                | Description                            |
@@ -22,6 +32,7 @@ These values are required by terrafrom to build the pipeline infrastructure
 *run the commands from the `infra/` directory*
 
 **Build terrafrom infastructure**: `terraform apply --auto-approve`  
+____
 
 **Destroy terrafrom infastructure (if necessary ⚠️)**: `terraform destroy --auto-approve && aws secretsmanager delete-secret --secret-id <secret id> --force-delete-without-recover` 
 
