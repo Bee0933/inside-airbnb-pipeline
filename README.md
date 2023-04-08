@@ -68,7 +68,7 @@ ___
 
 <br>
 
-**Data Transformation**:
+**Data Transformation(Lineage graph)**:
 
 ![Lineage graph](static/linage_graph.png "Lineage Graph from Data Transformation")
 
