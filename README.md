@@ -36,7 +36,15 @@ ___
 ## Data Pipeline Diagram
 ![Alt text](static/capstone-zoomcamp.drawio_page-0001.jpg "Data Pipeline Diagram")
 
-## Project build & setup ⚙️ (local)
+**Prerequisites**:
+- AWS account with access key to use aws cli
+- Prefect cloud account 
+- DBT cloud account
+- Kaggle account
+- slack webhook
+
+## Project build & setup ⚙️ 
+
 - [setup and build infra](./infra/infra_README.md)
 
 - [setup environment variables](./env_README.md)
@@ -56,6 +64,16 @@ ___
 
 ![Alt text](static/sample-slack-notif.png "Slcak Notification ETL src to data lake")
 
+<br>
+
+**Data Transformation**:
+
+![Lineage graph](static/linage_graph.png "Lineage Graph from Data Transformation")
+
+- `airbnb.listings` and `airbnb.reviews` are tables from the target schema of the warehouse where the extracted pipeline data was loaded based on the EL (Extract & Load) process
+- `src_hosts`, `src_listings` and `src_reviews` are *ephemeral* materialized and transformed tables extracted with selected fields from the loaded data source
+- `dim_hosts_cleansed` and `dim_listings_cleansed` are transformed and cleaned *views* from the ephemeral tables
+- `dim_listings_hosts` is a dimension table from the join of  `dim_hosts_cleansed` and `dim_listings_cleansed` views
 
 ## Project Structure
       .
