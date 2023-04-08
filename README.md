@@ -42,6 +42,8 @@ ___
 - DBT cloud account
 - Kaggle account
 - slack webhook
+- Terraform
+- Make
 
 ## Project build & setup ⚙️ 
 
